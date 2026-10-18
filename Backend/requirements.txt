@@ -1,0 +1,28 @@
+# Web framework
+fastapi
+uvicorn[standard]
+ 
+# LLM providers
+groq
+cerebras-cloud-sdk
+ 
+# Vector database (hosted — replaces chromadb)
+pinecone
+ 
+# Embeddings (local, no server — replaces ollama)
+sentence-transformers
+ 
+# Search API for KB enrichment
+tavily-python
+ 
+# Data ingestion
+requests
+beautifulsoup4
+pymupdf
+tqdm
+ 
+# Utilities
+python-dotenv
+pydantic
+httpx
+google-api-python-client

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Workout - BetterU</title>
+<link rel="icon" type="image/svg+xml" href="assets/leaf.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+/* ── Workout page ── */
+.workout-page { padding: 40px 20px 80px; max-width: 900px; margin: 0 auto; }
+
+.page-header { text-align: center; margin-bottom: 36px; }
+.page-header .badge { margin-bottom: 12px; }
+.page-header h1 { font-size: 36px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
+.page-header h1 span { color: var(--green); }
+.page-header p { color: var(--muted); font-size: 16px; }
+
+/* ── States ── */
+.state-box {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+}
+.state-box .state-icon { font-size: 48px; margin-bottom: 16px; }
+.state-box h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.state-box p { color: var(--muted); margin-bottom: 24px; max-width: 380px; margin-left: auto; margin-right: auto; }
+
+/* ── Toolbar ── */
+.workout-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.workout-meta h2 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.workout-meta p { color: var(--muted); font-size: 14px; }
+.toolbar-actions { display: flex; gap: 10px; align-items: center; }
+
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--white); color: var(--text);
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  transition: border-color var(--dur-fast) ease, color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-premium);
+}
+.btn-outline:hover { border-color: var(--green); color: var(--green); transform: translateY(-1px); }
+
+.btn-green {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 18px; border-radius: 999px; border: none;
+  background: var(--green); color: white;
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(21,128,61,0.18);
+  transition: background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-premium), box-shadow var(--dur-base) var(--ease-premium);
+}
+.btn-green:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 12px 22px rgba(22,101,52,0.26); }
+.btn-green:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* ── Progress bar ── */
+.progress-wrap { margin-bottom: 32px; }
+.progress-label {
+  display: flex; justify-content: space-between;
+  font-size: 13px; font-weight: 600; color: var(--muted);
+  margin-bottom: 8px;
+}
+.progress-label span:last-child { color: var(--green); }
+.progress-bar {
+  height: 8px; background: var(--border); border-radius: 999px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--green); border-radius: 999px;
+  transition: width 0.4s var(--ease-premium);
+}
+
+/* ── Day sections ── */
+.day-section { margin-bottom: 36px; }
+.day-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.day-badge {
+  background: var(--green-light); color: var(--green);
+  font-size: 12px; font-weight: 700; padding: 4px 12px;
+  border-radius: 999px; white-space: nowrap;
+}
+.day-focus { font-size: 18px; font-weight: 700; }
+.day-count { margin-left: auto; font-size: 13px; color: var(--muted); }
+
+/* ── Exercise cards ── */
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.ex-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  transition: border-color var(--dur-base) var(--ease-premium), box-shadow var(--dur-base) var(--ease-premium), transform var(--dur-base) var(--ease-premium);
+  cursor: pointer;
+}
+.ex-card:hover { border-color: #cde8d6; box-shadow: var(--shadow-strong); transform: translateY(-2px); }
+.ex-card.done { border-color: var(--green); background: #f0faf4; }
+.ex-card.done .ex-img-wrap { opacity: 0.6; }
+
+.ex-img-wrap {
+  position: relative; height: 160px; background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.ex-img-wrap img {
+  max-height: 140px; max-width: 90%;
+  object-fit: contain;
+  transition: transform var(--dur-slow) var(--ease-premium);
+}
+.ex-card:hover .ex-img-wrap img { transform: scale(1.04); }
+.ex-img-placeholder {
+  font-size: 48px; opacity: 0.3;
+}
+
+.done-overlay {
+  position: absolute; inset: 0;
+  background: rgba(21,128,61,0.12);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity var(--dur-base) ease;
+}
+.ex-card.done .done-overlay { opacity: 1; }
+.done-check {
+  width: 52px; height: 52px; background: var(--green);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 26px; font-weight: 700;
+  box-shadow: 0 4px 16px rgba(21,128,61,0.4);
+}
+
+.ex-body { padding: 14px 16px 16px; }
+.ex-name {
+  font-size: 15px; font-weight: 700; margin-bottom: 8px;
+  line-height: 1.3;
+}
+.ex-card.done .ex-name { color: var(--green); }
+
+.ex-stats {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.ex-stat {
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; color: var(--text);
+}
+.ex-card.done .ex-stat { background: var(--green-light); border-color: #b6dfc5; color: var(--green-dark); }
+
+.ex-note { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.ex-muscles { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+/* ── Completion banner ── */
+.completion-banner {
+  display: none; align-items: center; gap: 16px;
+  background: linear-gradient(135deg, #f0faf4, #e7f6ec);
+  border: 1.5px solid #b6dfc5;
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 16px rgba(21,128,61,0.1);
+}
+.completion-banner.visible { display: flex; }
+.completion-banner .banner-icon { font-size: 36px; flex-shrink: 0; }
+.completion-banner h3 { font-size: 18px; font-weight: 800; color: var(--green-dark); margin-bottom: 2px; }
+.completion-banner p { font-size: 14px; color: var(--green); }
+
+/* ── Loading spinner ── */
+.spinner-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 60px 20px; }
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Generate form ── */
+.gen-form {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 32px;
+  box-shadow: var(--shadow-soft); margin-bottom: 32px;
+}
+.gen-form h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.gen-form p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+.gen-input-row { display: flex; gap: 10px; }
+.gen-input {
+  flex: 1; padding: 12px 16px; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); font-family: var(--font); font-size: 15px;
+  outline: none; transition: border-color var(--dur-fast) ease;
+}
+.gen-input:focus { border-color: var(--green); }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="assets/leaf.svg" alt="BetterU logo">
+      <span>BetterU</span>
+    </a>
+    <nav class="nav-links">
+      <a href="about.html">About Us</a>
+      <a href="team.html">Our Team</a>
+      <a href="chat.html">Chat</a>
+      <a href="profile.html">My Profile</a>
+      <a href="workout.html" class="active">Workout</a>
+    </nav>
+    <a href="cta.html" class="btn-primary">Get Started Free</a>
+  </div>
+</header>
+
+<div class="workout-page">
+
+  <div class="page-header">
+    <div class="badge">AI Workout Builder</div>
+    <h1>Your custom <span>workout plan</span></h1>
+    <p>Generated from your notes and goals · powered by real exercise data</p>
+  </div>
+
+  <!-- Quick generate form (shown when no plan loaded) -->
+  <div id="gen-form" class="gen-form" style="display:none">
+    <h3>Generate a new plan</h3>
+    <p>Describe what you want — e.g. "full body 3 days", "upper body push pull", "leg day for weight loss"</p>
+    <div class="gen-input-row">
+      <input id="gen-input" class="gen-input" type="text" placeholder="What kind of workout do you need?" maxlength="200"/>
+      <button class="btn-green" onclick="generateFromForm()">Generate →</button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div id="loading" style="display:none">
+    <div class="spinner-wrap">
+      <div class="spinner"></div>
+      <p style="color:var(--muted);font-size:15px">Building your workout plan…</p>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div id="empty-state" class="state-box">
+    <div class="state-icon">🏋️</div>
+    <h2>No workout plan yet</h2>
+    <p>Ask Alden in the chat to generate a workout, or describe what you want below.</p>
+    <button class="btn-green" onclick="showGenForm()">Build my workout →</button>
+  </div>
+
+  <!-- Plan content -->
+  <div id="plan-content" style="display:none">
+
+    <!-- Completion banner -->
+    <div id="completion-banner" class="completion-banner">
+      <div class="banner-icon">🎉</div>
+      <div>
+        <h3>Workout complete!</h3>
+        <p>Great work — every exercise is done.</p>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="workout-toolbar">
+      <div class="workout-meta">
+        <h2 id="plan-title"></h2>
+        <p id="plan-desc"></p>
+      </div>
+      <div class="toolbar-actions">
+        <button class="btn-outline" onclick="resetChecks()">↺ Reset</button>
+        <button class="btn-outline" onclick="clearPlan()">✕ Clear</button>
+        <button class="btn-green" onclick="showGenForm()">+ New plan</button>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>Progress</span>
+        <span id="progress-text">0 / 0 done</span>
+      </div>
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Days -->
+    <div id="days-container"></div>
+
+  </div>
+
+</div><!-- /workout-page -->
+
+<footer class="footer">
+
+<div class="footer-top">
+
+<div class="footer-logo">
+<img src="assets/leaf.svg" alt="BetterU logo">
+<span>BetterU</span>
+</div>
+
+<div class="footer-links">
+<a href="about.html">About Us</a>
+<a href="team.html">Our Team</a>
+<a href="profile.html">Get Started</a>
+</div>
+
+</div>
+
+<div class="footer-bottom">
+<p>2026 BetterU. Evidence-based nutrition for everyone.</p>
+</div>
+
+</footer>
+
+<script src="script.js"></script>
+<script>
+const STORAGE_PLAN  = 'betterU_workout_plan';
+const STORAGE_DONE  = 'betterU_workout_done';
+const API_BASE      = 'http://127.0.0.1:8000';
+
+let currentPlan = null;   // plan JSON from backend
+let doneSet     = new Set(); // "dayIdx-exIdx" strings
+
+// ── Profile helper (reads from sessionStorage, same as chat.html) ─────────
+
+function getProfile() {
+  try {
+    const saved = sessionStorage.getItem('betterU_profile');
+    return saved ? JSON.parse(saved) : null;
+  } catch(e) { return null; }
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────
+
+function boot() {
+  const saved = localStorage.getItem(STORAGE_PLAN);
+  if (saved) {
+    try {
+      currentPlan = JSON.parse(saved);
+      const savedDone = JSON.parse(localStorage.getItem(STORAGE_DONE) || '[]');
+      doneSet = new Set(savedDone);
+      renderPlan();
+      return;
+    } catch(e) { /* corrupt, ignore */ }
+  }
+  showEmpty();
+}
+
+// ── State helpers ─────────────────────────────────────────────────────────
+
+function showEmpty() {
+  document.getElementById('empty-state').style.display = '';
+  document.getElementById('plan-content').style.display = 'none';
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('gen-form').style.display = 'none';
+}
+
+function showLoading() {
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('plan-content').style.display = 'none';
+  document.getElementById('loading').style.display = '';
+  document.getElementById('gen-form').style.display = 'none';
+}
+
+function showGenForm() {
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('gen-form').style.display = '';
+  document.getElementById('plan-content').style.display = 'none';
+  document.getElementById('gen-input').focus();
+}
+
+// ── Render ────────────────────────────────────────────────────────────────
+
+function renderPlan() {
+  if (!currentPlan) { showEmpty(); return; }
+
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('gen-form').style.display = 'none';
+  document.getElementById('plan-content').style.display = '';
+
+  document.getElementById('plan-title').textContent = currentPlan.title || 'My Workout';
+  document.getElementById('plan-desc').textContent  = currentPlan.description || '';
+
+  const container = document.getElementById('days-container');
+  container.innerHTML = '';
+
+  const days = currentPlan.days || [];
+  let totalEx = 0;
+  let doneCount = 0;
+
+  days.forEach((day, di) => {
+    const exercises = day.exercises || [];
+    totalEx += exercises.length;
+
+    const section = document.createElement('div');
+    section.className = 'day-section';
+
+    const dayDone = exercises.filter((_, ei) => doneSet.has(`${di}-${ei}`)).length;
+    doneCount += dayDone;
+
+    section.innerHTML = `
+      <div class="day-header">
+        <span class="day-badge">${escHtml(day.day || `Day ${di+1}`)}</span>
+        <span class="day-focus">${escHtml(day.focus || '')}</span>
+        <span class="day-count">${dayDone}/${exercises.length} done</span>
+      </div>
+      <div class="exercise-grid" id="grid-${di}"></div>
+    `;
+    container.appendChild(section);
+
+    const grid = section.querySelector(`#grid-${di}`);
+    exercises.forEach((ex, ei) => {
+      grid.appendChild(buildCard(ex, di, ei));
+    });
+  });
+
+  updateProgress(doneCount, totalEx);
+}
+
+function buildCard(ex, di, ei) {
+  const key  = `${di}-${ei}`;
+  const done = doneSet.has(key);
+
+  const card = document.createElement('div');
+  card.className = `ex-card${done ? ' done' : ''}`;
+  card.setAttribute('data-key', key);
+  card.onclick = () => toggleDone(key);
+
+  const img = ex.images && ex.images.length > 0
+    ? `<img src="${escHtml(ex.images[0])}" alt="${escHtml(ex.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=ex-img-placeholder>🏋️</div>'">`
+    : `<div class="ex-img-placeholder">🏋️</div>`;
+
+  const muscleStr = ex.muscles && ex.muscles.length
+    ? `<div class="ex-muscles">💪 ${escHtml(ex.muscles.join(', '))}</div>` : '';
+
+  const noteStr = ex.note
+    ? `<div class="ex-note">${escHtml(ex.note)}</div>` : '';
+
+  const descStr = (!ex.note && ex.desc)
+    ? `<div class="ex-note">${escHtml(ex.desc.slice(0, 120))}</div>` : '';
+
+  card.innerHTML = `
+    <div class="ex-img-wrap">
+      ${img}
+      <div class="done-overlay"><div class="done-check">✓</div></div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-name">${escHtml(ex.name)}</div>
+      <div class="ex-stats">
+        <span class="ex-stat">${ex.sets} sets</span>
+        <span class="ex-stat">${escHtml(String(ex.reps))} reps</span>
+        ${ex.rest_sec ? `<span class="ex-stat">${ex.rest_sec}s rest</span>` : ''}
+      </div>
+      ${noteStr}${descStr}${muscleStr}
+    </div>
+  `;
+  return card;
+}
+
+// ── Interaction ───────────────────────────────────────────────────────────
+
+function toggleDone(key) {
+  if (doneSet.has(key)) {
+    doneSet.delete(key);
+  } else {
+    doneSet.add(key);
+  }
+  saveDone();
+  updateCardState(key);
+  recountProgress();
+}
+
+function updateCardState(key) {
+  const card = document.querySelector(`.ex-card[data-key="${key}"]`);
+  if (!card) return;
+  card.classList.toggle('done', doneSet.has(key));
+}
+
+function recountProgress() {
+  if (!currentPlan) return;
+  const days = currentPlan.days || [];
+  let total = 0, done = 0;
+  days.forEach((day, di) => {
+    (day.exercises || []).forEach((_, ei) => {
+      total++;
+      if (doneSet.has(`${di}-${ei}`)) done++;
+    });
+    // recount day header
+    const dayDone = (day.exercises || []).filter((_, ei) => doneSet.has(`${di}-${ei}`)).length;
+    const countEl = document.querySelector(`#grid-${di}`)?.closest('.day-section')?.querySelector('.day-count');
+    if (countEl) countEl.textContent = `${dayDone}/${(day.exercises||[]).length} done`;
+  });
+  updateProgress(done, total);
+}
+
+function updateProgress(done, total) {
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${done} / ${total} done`;
+  const banner = document.getElementById('completion-banner');
+  if (done > 0 && done === total) {
+    banner.classList.add('visible');
+    banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } else {
+    banner.classList.remove('visible');
+  }
+}
+
+function resetChecks() {
+  doneSet.clear();
+  saveDone();
+  renderPlan();
+}
+
+function clearPlan() {
+  if (!confirm('Clear this workout plan?')) return;
+  currentPlan = null;
+  doneSet.clear();
+  localStorage.removeItem(STORAGE_PLAN);
+  localStorage.removeItem(STORAGE_DONE);
+  showEmpty();
+}
+
+function saveDone() {
+  localStorage.setItem(STORAGE_DONE, JSON.stringify([...doneSet]));
+}
+
+// ── Generate from form ────────────────────────────────────────────────────
+
+async function generateFromForm() {
+  const input = document.getElementById('gen-input');
+  const msg = input.value.trim();
+  if (!msg) { input.focus(); return; }
+  await generatePlan(msg);
+}
+
+async function generatePlan(message) {
+  showLoading();
+  const profile = getProfile();
+  try {
+    const res = await fetch(`${API_BASE}/workout/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message,
+        profile: profile || null,
+        user_notes: localStorage.getItem('betterU_notes') || ''
+      })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || `Server error ${res.status}`);
+    }
+    const plan = await res.json();
+    if (!plan.days || !plan.days.length) throw new Error('Empty plan returned');
+    currentPlan = plan;
+    doneSet.clear();
+    localStorage.setItem(STORAGE_PLAN, JSON.stringify(plan));
+    localStorage.removeItem(STORAGE_DONE);
+    renderPlan();
+  } catch(e) {
+    console.error('Workout generation failed:', e);
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('empty-state').style.display = '';
+    alert(`Could not generate workout: ${e.message}\n\nMake sure the backend is running on ${API_BASE}`);
+  }
+}
+
+// ── Util ──────────────────────────────────────────────────────────────────
+
+function escHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Expose for external callers (e.g. chat page redirect)
+window.BetterUWorkout = { generatePlan };
+
+boot();
+
+// Auto-generate if arriving from chat with ?q= param
+(function checkQueryParam() {
+  const params = new URLSearchParams(location.search);
+  const q = params.get('q');
+  if (q) {
+    // Clear the param from URL without reload
+    history.replaceState(null, '', location.pathname);
+    generatePlan(q);
+  }
+})();
+</script>
+</body>
+</html>

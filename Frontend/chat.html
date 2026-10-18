@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en" class="chat-page-root">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Alden - BetterU</title>
+<link rel="icon" type="image/svg+xml" href="assets/leaf.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<link rel="stylesheet" href="chat.css"/>
+</head>
+<body class="chat-page">
+<!-- Navbar -->
+<header class="navbar">
+
+<div class="nav-container">
+
+<a href="index.html" class="logo">
+<img src="assets/leaf.svg" alt="BetterU logo">
+<span>BetterU</span>
+</a>
+
+<nav class="nav-links">
+
+<a href="about.html">About Us</a>
+<a href="team.html">Our Team</a>
+<a href="chat.html" class="active">Chat</a>
+<a href="profile.html">My Profile</a>
+<a href="workout.html">Workout</a>
+
+</nav>
+
+<a href="profile.html" class="btn-primary">Get Started Free</a>
+
+</div>
+
+</header>
+
+<button
+  type="button"
+  id="recipe-reopen-tab"
+  class="recipe-reopen-tab"
+  hidden
+  aria-controls="recipe-sidebar"
+  aria-label="Open recipe video panel"
+>
+  <span class="recipe-reopen-tab__chev" aria-hidden="true">▸</span>
+  <span class="recipe-reopen-tab__label">Recipe video</span>
+</button>
+
+<div id="recipe-backdrop" class="recipe-backdrop" role="presentation" aria-hidden="true"></div>
+<aside id="recipe-sidebar" class="recipe-sidebar" aria-label="Recipe video">
+  <div class="recipe-sidebar-inner">
+    <h3>Chef's corner</h3>
+    <div id="video-container">
+      <iframe
+        id="video-player"
+        title="Recipe video"
+        width="560"
+        height="315"
+        src=""
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen></iframe>
+    </div>
+    <p class="sidebar-note">A matching recipe video from YouTube. Close when you are done watching.</p>
+    <button type="button" class="sidebar-close" id="recipe-sidebar-close">Close panel</button>
+  </div>
+</aside>
+
+<!-- Page -->
+<div id="app">
+  <div class="page-header">
+    <div class="badge">AI Nutrition Assistant</div>
+    <h1>Ask anything about <span>nutrition</span></h1>
+    <p>Powered by your local food database: 40,000+ foods, instant answers.</p>
+  </div>
+
+  <div class="chat-card">
+    <!-- Chat header -->
+    <div class="chat-header">
+      <div class="chat-avatar">A</div>
+      <div class="chat-header-info">
+        <h3>Alden</h3>
+        <p>Nutrition · Meal Planning · Macro Tracking</p>
+      </div>
+      <div class="status">
+        <div class="status-dot"></div>
+        Online
+      </div>
+      <a href="profile.html" id="profile-badge"></a>
+      <a href="profile.html" id="no-profile-banner">⚠ No profile - click to set up</a>
+    </div>
+
+    <!-- Messages -->
+    <div id="messages">
+      <div id="welcome">
+        <div class="welcome-icon">🥗</div>
+        <h2>What would you like to know?</h2>
+        <p>Ask about any food, nutrient, or meal idea.</p>
+        <div class="suggestion-grid">
+          <button class="suggestion-card" onclick="useSuggestion(this)">
+            <span class="s-icon">🍗</span>
+            How much protein in chicken breast?
+          </button>
+          <button class="suggestion-card" onclick="useSuggestion(this)">
+            <span class="s-icon">🌅</span>
+            High protein breakfast ideas
+          </button>
+          <button class="suggestion-card" onclick="useSuggestion(this)">
+            <span class="s-icon">🥜</span>
+            Best low calorie snacks
+          </button>
+          <button class="suggestion-card" onclick="useSuggestion(this)">
+            <span class="s-icon">🐟</span>
+            Compare salmon vs tuna
+          </button>
+          <button class="suggestion-card" onclick="useSuggestion(this)">
+            <span class="s-icon">🍳</span>
+            Simple high-protein dinner recipe
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-area">
+      <div class="input-row">
+        <textarea id="input" placeholder="Ask about any food or nutrition goal…" rows="1"></textarea>
+        <button id="send" onclick="sendMessage()">↑</button>
+      </div>
+      <div class="input-hint">Press Enter to send · Shift+Enter for new line</div>
+    </div>
+  </div>
+</div>
+
+
+<footer class="footer">
+
+<div class="footer-top">
+
+<div class="footer-logo">
+<img src="assets/leaf.svg" alt="BetterU logo">
+<span>BetterU</span>
+</div>
+
+<div class="footer-links">
+<a href="about.html">About Us</a>
+<a href="team.html">Our Team</a>
+<a href="#cta">Get Started</a>
+</div>
+
+</div>
+
+<div class="footer-bottom">
+<p>2026 BetterU. Evidence-based nutrition for everyone.</p>
+</div>
+
+</footer>
+
+<script src="script.js"></script>
+<script>
+  const messagesEl = document.getElementById('messages');
+  const inputEl    = document.getElementById('input');
+  const sendBtn    = document.getElementById('send');
+  const welcomeEl  = document.getElementById('welcome');
+
+  let history = [];
+  let isStreaming = false;
+
+  const YT_ID_RE = /^[a-zA-Z0-9_-]{11}$/;
+  let activeRecipeVideoId = null;
+  /** Ignore backdrop clicks right after open (same pointer-up from Send would otherwise close the panel). */
+  let recipeBackdropIgnoreClicksUntil = 0;
+
+  function closeRecipePanel() {
+    const sidebar = document.getElementById('recipe-sidebar');
+    const backdrop = document.getElementById('recipe-backdrop');
+    const iframe = document.getElementById('video-player');
+    if (iframe) iframe.src = 'about:blank';
+    sidebar?.classList.remove('open');
+    backdrop?.classList.remove('open');
+    backdrop?.classList.remove('recipe-backdrop--ready');
+    document.body.classList.remove('recipe-panel-open');
+    syncRecipeReopenTab();
+  }
+
+  function syncRecipeReopenTab() {
+    const tab = document.getElementById('recipe-reopen-tab');
+    const sidebar = document.getElementById('recipe-sidebar');
+    if (!tab || !sidebar) return;
+    const hasVideo = Boolean(activeRecipeVideoId && YT_ID_RE.test(activeRecipeVideoId));
+    const panelOpen = sidebar.classList.contains('open');
+    tab.hidden = !hasVideo || panelOpen;
+  }
+
+  function showRecipeVideo(videoId) {
+    if (!videoId || !YT_ID_RE.test(String(videoId).trim())) return;
+    const id = String(videoId).trim();
+    const sidebar = document.getElementById('recipe-sidebar');
+    const backdrop = document.getElementById('recipe-backdrop');
+    const iframe = document.getElementById('video-player');
+    if (!sidebar || !iframe) return;
+    const embedUrl = `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`;
+
+    if (activeRecipeVideoId === id) {
+      const blank = !iframe.src || iframe.src === 'about:blank';
+      if (blank) iframe.src = embedUrl;
+      sidebar.classList.add('open');
+      backdrop?.classList.add('open');
+      backdrop?.classList.remove('recipe-backdrop--ready');
+      document.body.classList.add('recipe-panel-open');
+      recipeBackdropIgnoreClicksUntil = Date.now() + 800;
+      queueBackdropInteractive(backdrop);
+      syncRecipeReopenTab();
+      return;
+    }
+
+    activeRecipeVideoId = id;
+    iframe.removeAttribute('loading');
+    iframe.src = embedUrl;
+    sidebar.classList.add('open');
+    backdrop?.classList.add('open');
+    backdrop?.classList.remove('recipe-backdrop--ready');
+    document.body.classList.add('recipe-panel-open');
+    recipeBackdropIgnoreClicksUntil = Date.now() + 800;
+    queueBackdropInteractive(backdrop);
+    syncRecipeReopenTab();
+  }
+
+  function queueBackdropInteractive(backdrop) {
+    if (!backdrop) return;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setTimeout(() => backdrop.classList.add('recipe-backdrop--ready'), 400);
+      });
+    });
+  }
+
+  const SIGNAL_PREFIX = 'SIGNAL:VIDEO_ID:';
+
+  function stripLeadingVideoSignals(buf) {
+    let rest = buf;
+    while (true) {
+      const m = rest.match(/^SIGNAL:VIDEO_ID:([a-zA-Z0-9_-]{11})\r?\n?/);
+      if (!m) break;
+      showRecipeVideo(m[1]);
+      rest = rest.slice(m[0].length);
+    }
+    return rest;
+  }
+
+  /** Hold trailing bytes if they could be the start of a split SIGNAL line. */
+  function holdIfIncompleteSignal(buf) {
+    if (!buf) return { emit: '', keep: '' };
+    if (SIGNAL_PREFIX.startsWith(buf) && buf.length < SIGNAL_PREFIX.length) {
+      return { emit: '', keep: buf };
+    }
+    if (buf.startsWith(SIGNAL_PREFIX) && buf.length < SIGNAL_PREFIX.length + 11) {
+      return { emit: '', keep: buf };
+    }
+    return { emit: buf, keep: '' };
+  }
+
+  function getProfile() {
+    try {
+      const saved = sessionStorage.getItem('betterU_profile');
+      return saved ? JSON.parse(saved) : null;
+    } catch(e) { return null; }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const profile = getProfile();
+    if (!profile) {
+      document.getElementById('no-profile-banner').style.display = 'inline-block';
+    } else {
+      const badge = document.getElementById('profile-badge');
+      badge.style.display = 'inline-block';
+      const goal = profile.goal ? profile.goal.charAt(0).toUpperCase() + profile.goal.slice(1) : '';
+      const kcal = profile.results?.recommended_calories ? Math.round(profile.results.recommended_calories) : '?';
+      badge.textContent = `👤 ${goal} · ${kcal} kcal/day`;
+    }
+
+    document.getElementById('recipe-reopen-tab')?.addEventListener('click', () => {
+      if (!activeRecipeVideoId) return;
+      showRecipeVideo(activeRecipeVideoId);
+    });
+
+    document.getElementById('recipe-sidebar-close')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeRecipePanel();
+    });
+    document.getElementById('recipe-backdrop')?.addEventListener('click', (e) => {
+      if (e.target !== e.currentTarget) return;
+      const backdrop = e.currentTarget;
+      if (!backdrop.classList.contains('recipe-backdrop--ready')) return;
+      if (Date.now() < recipeBackdropIgnoreClicksUntil) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      closeRecipePanel();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (!document.getElementById('recipe-sidebar')?.classList.contains('open')) return;
+      e.preventDefault();
+      closeRecipePanel();
+    });
+
+    syncRecipeReopenTab();
+  });
+
+  inputEl.addEventListener('input', () => {
+    inputEl.style.height = 'auto';
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + 'px';
+  });
+
+  inputEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  function useSuggestion(btn) {
+    inputEl.value = btn.innerText.trim().replace(/^[^\w]+/, '');
+    sendMessage();
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function renderMarkdown(raw) {
+    return escapeHtml(raw)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/^[-•]\s(.+)$/gm, '<li>$1</li>')
+      .replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
+  }
+
+  function addMessage(role, text) {
+    if (welcomeEl) welcomeEl.remove();
+    const wrap = document.createElement('div');
+    wrap.className = `msg ${role}`;
+    wrap.innerHTML = `
+      <div class="msg-label">${role === 'user' ? 'You' : 'Alden'}</div>
+      <div class="bubble">${escapeHtml(text)}</div>
+    `;
+    messagesEl.appendChild(wrap);
+    scrollBottom();
+    return wrap.querySelector('.bubble');
+  }
+
+  function scrollBottom() {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text || isStreaming) return;
+
+    isStreaming = true;
+    sendBtn.disabled = true;
+    inputEl.value = '';
+    inputEl.style.height = 'auto';
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+
+    // Bot bubble
+    const botWrap = document.createElement('div');
+    botWrap.className = 'msg bot';
+    botWrap.innerHTML = `<div class="msg-label">Alden</div><div class="bubble"><span class="cursor"></span></div>`;
+    messagesEl.appendChild(botWrap);
+    const bubble = botWrap.querySelector('.bubble');
+    scrollBottom();
+
+    let fullText = '';
+    let streamPending = '';
+
+    try {
+      const profileData = getProfile();
+      const res = await fetch('http://127.0.0.1:8000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          history: history.slice(-6),
+          profile: profileData,
+          calc_results: profileData?.results ?? null,
+          user_notes: (typeof localStorage !== 'undefined' && localStorage.getItem('betterU_notes')) || ''
+        })
+      });
+
+      const headerVid = res.headers.get('X-Recipe-Video-Id')?.trim();
+      if (headerVid) showRecipeVideo(headerVid);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        streamPending += decoder.decode(value, { stream: true });
+        streamPending = stripLeadingVideoSignals(streamPending);
+        const { emit, keep } = holdIfIncompleteSignal(streamPending);
+        streamPending = keep;
+        if (emit) {
+          fullText += emit;
+          bubble.innerHTML = renderMarkdown(fullText) + '<span class="cursor"></span>';
+          scrollBottom();
+        }
+      }
+
+      streamPending = stripLeadingVideoSignals(streamPending);
+      fullText += streamPending;
+
+      bubble.innerHTML = renderMarkdown(fullText);
+      history.push({ role: 'assistant', content: fullText });
+
+      // Show "Build Workout" CTA if response is exercise-related
+      if (isExerciseResponse(fullText, text)) {
+        const cta = buildWorkoutCTA(text);
+        botWrap.appendChild(cta);
+        scrollBottom();
+      }
+
+    } catch (err) {
+      bubble.innerHTML = '<span style="color:#dc2626">⚠ Could not reach backend. Is the server running?</span>';
+    }
+
+    isStreaming = false;
+    sendBtn.disabled = false;
+    inputEl.focus();
+  }
+
+  /** Returns true if the assistant response is about exercises/workouts. */
+  function isExerciseResponse(response, userMsg) {
+    const haystack = (response + ' ' + userMsg).toLowerCase();
+    const signals = [
+      'exercise', 'workout', 'training', 'sets', 'reps', 'squat', 'bench',
+      'deadlift', 'push-up', 'pull-up', 'cardio', 'gym', 'muscle', 'lift',
+      'routine', 'strength', 'resistance', 'weight training', 'hiit', 'circuit'
+    ];
+    return signals.some(s => haystack.includes(s));
+  }
+
+  /** Builds the green "Build Workout Plan" button appended below the bot bubble. */
+  function buildWorkoutCTA(userMsg) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'margin-top:10px;';
+    const btn = document.createElement('a');
+    btn.href = `workout.html?q=${encodeURIComponent(userMsg)}`;
+    btn.style.cssText = [
+      'display:inline-flex', 'align-items:center', 'gap:8px',
+      'padding:9px 18px', 'border-radius:999px', 'border:none',
+      'background:var(--green)', 'color:white',
+      'font-family:var(--font)', 'font-size:14px', 'font-weight:600',
+      'cursor:pointer', 'text-decoration:none',
+      'box-shadow:0 6px 14px rgba(21,128,61,0.18)',
+      'transition:background 180ms ease, transform 180ms var(--ease-premium)'
+    ].join(';');
+    btn.onmouseover = () => { btn.style.background = 'var(--green-dark)'; btn.style.transform = 'translateY(-1px)'; };
+    btn.onmouseout  = () => { btn.style.background = 'var(--green)';      btn.style.transform = '';                 };
+    btn.innerHTML = '🏋️ Build Workout Plan →';
+    wrap.appendChild(btn);
+    return wrap;
+  }
+
+</script>
+</body>
+</html>

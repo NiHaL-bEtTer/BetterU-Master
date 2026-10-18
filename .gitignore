@@ -1,0 +1,11 @@
+# ChromaDB / vector DB storage
+chroma/
+chromadb/
+*.chroma/
+*.chromadb/
+chromadb/
+__pycache__/
+*.pyc
+.env
+Backend/raw_downloads/
+Backend/ingestion.log
