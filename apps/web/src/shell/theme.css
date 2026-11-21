@@ -1,0 +1,219 @@
+/* BetterU palette on the Bionis dashboard: the landing page's forest, avocado,
+   leaf and mist replace Bionis's neutral greys and blue. Layout stays Bionis. */
+.bionis-dashboard.betteru,
+body:has(.bionis-dashboard.betteru) [data-slot="sidebar"][data-mobile="true"],
+body:has(.bionis-dashboard.betteru) [data-slot="dropdown-menu-content"],
+body:has(.bionis-dashboard.betteru) [data-slot="sheet-content"],
+body:has(.bionis-dashboard.betteru) [data-slot="tooltip-content"] {
+  /* Brand */
+  --brand-forest: #0a2416;
+  --brand-canopy: #12351f;
+  --brand-avocado: #4e6b12;
+  --brand-leaf: #b9e06a;
+  --brand-mist: #f2f6ec;
+
+  /* Surfaces & text */
+  --background: #ffffff;
+  --foreground: #0b140e;
+  --card: #f6f8f3;
+  --card-foreground: #0b140e;
+  --popover: #ffffff;
+  --popover-foreground: #0b140e;
+  --primary: #0a2416;
+  --primary-foreground: #f3f7ee;
+  --secondary: #f2f6ec;
+  --secondary-foreground: #0b140e;
+  --muted: #f2f6ec;
+  --muted-foreground: #5f6b62;
+  --accent: #e9f0df;
+  --accent-foreground: #0a2416;
+  --border: #e1e7dc;
+  --input: #e1e7dc;
+  --ring: #4e6b12;
+  --sidebar: #f7f9f4;
+  --sidebar-foreground: #0b140e;
+  --sidebar-accent: #ffffff;
+  --sidebar-accent-foreground: #0a2416;
+  --sidebar-border: #e1e7dc;
+  --sidebar-ring: #4e6b12;
+  --promo-gradient-from: #f2f6ec;
+  --promo-gradient-to: #b9e06a;
+
+  /* Dashboard accents */
+  --bionis-blue: #4e6b12;
+  --live: #4e6b12;
+  --trend: #4e6b12;
+  --vital-good: #4e6b12;
+  --chart-sleep: #4e6b12;
+  --chart-sleep-fill: color-mix(in srgb, #4e6b12 12%, transparent);
+  --chart-steps: #4e6b12;
+  --chart-recovery: #9cc94a;
+  --chart-axis: #5f6b62;
+  --chart-grid: #e1e7dc;
+  --chart-period: #3f5a0e;
+  --chart-period-bg: #e6efc9;
+  --chart-tooltip-bg: #f6f8f3;
+  --chart-warn: #b45309;
+  --chart-warn-bg: #fdf3e2;
+  --prediction-warn: #b45309;
+  --prediction-danger: #b42318;
+  --insight-prediction: #4e6b12;
+  --insight-vitals: #0a2416;
+  --insight-actions: #7aa33a;
+  --metric-kcal: #0a2416;
+  --metric-protein: #4e6b12;
+  --metric-carbs: #7aa33a;
+  --metric-fat: #a3b86c;
+  --metric-warn: #b45309;
+  --score: #4e6b12;
+
+  /* BetterU page tokens → dashboard tokens */
+  --paper: var(--background);
+  --mist: var(--brand-mist);
+  --ink: var(--foreground);
+  --stone: var(--muted-foreground);
+  --rule: var(--border);
+  --wash: var(--muted);
+  --avocado: #4e6b12;
+  --avocado-ink: #ffffff;
+  --flesh: #e6efc9;
+  --flesh-ink: #3f5a0e;
+  --forest: #0a2416;
+  --on-forest: #f3f7ee;
+  --leaf: #b9e06a;
+  --leaf-ink: #0a2416;
+  --danger: #b42318;
+  --danger-wash: #fdecea;
+  --font: 'Geist', system-ui, sans-serif;
+  font-family: 'Geist', system-ui, sans-serif;
+}
+.dark .bionis-dashboard.betteru, .bionis-dashboard.betteru.dark,
+.dark body:has(.bionis-dashboard.betteru) [data-slot="sidebar"][data-mobile="true"],
+.dark body:has(.bionis-dashboard.betteru) [data-slot="dropdown-menu-content"],
+.dark body:has(.bionis-dashboard.betteru) [data-slot="sheet-content"],
+.dark body:has(.bionis-dashboard.betteru) [data-slot="tooltip-content"] {
+  --background: #06130b;
+  --foreground: #eef4ea;
+  --card: #0d2015;
+  --card-foreground: #eef4ea;
+  --popover: #0b1d12;
+  --popover-foreground: #eef4ea;
+  --primary: #b9e06a;
+  --primary-foreground: #0a2416;
+  --secondary: #0d2015;
+  --secondary-foreground: #eef4ea;
+  --muted: #0d2015;
+  --muted-foreground: #93a596;
+  --accent: #12351f;
+  --accent-foreground: #eef4ea;
+  --border: #1c3324;
+  --input: #1c3324;
+  --ring: #b9e06a;
+  --sidebar: #0a2416;
+  --sidebar-foreground: #eef4ea;
+  --sidebar-accent: #12351f;
+  --sidebar-accent-foreground: #eef4ea;
+  --sidebar-border: #1c3324;
+  --sidebar-ring: #b9e06a;
+  --promo-gradient-from: #0a2416;
+  --promo-gradient-to: #4e6b12;
+
+  --bionis-blue: #b9e06a;
+  --live: #b9e06a;
+  --trend: #b9e06a;
+  --vital-good: #b9e06a;
+  --chart-sleep: #b9e06a;
+  --chart-sleep-fill: color-mix(in srgb, #b9e06a 14%, transparent);
+  --chart-steps: #b9e06a;
+  --chart-recovery: #6fa34a;
+  --chart-axis: #93a596;
+  --chart-grid: #1c3324;
+  --chart-period: #cfe89a;
+  --chart-period-bg: #183a20;
+  --chart-tooltip-bg: #0d2015;
+  --chart-warn: #f0b429;
+  --chart-warn-bg: rgb(240 180 41 / 12%);
+  --prediction-warn: #f0b429;
+  --prediction-danger: #f97066;
+  --insight-prediction: #4e6b12;
+  --insight-vitals: #12351f;
+  --insight-actions: #6fa34a;
+  --metric-kcal: #12351f;
+  --metric-protein: #4e6b12;
+  --metric-carbs: #6fa34a;
+  --metric-fat: #8aa35a;
+  --score: #b9e06a;
+
+  --mist: #0b1d12;
+  --avocado: #b9e06a;
+  --avocado-ink: #0a2416;
+  --flesh: #183a20;
+  --flesh-ink: #cfe89a;
+  --forest: #b9e06a;
+  --on-forest: #0a2416;
+  --leaf: #b9e06a;
+  --leaf-ink: #0a2416;
+  --danger: #f97066;
+  --danger-wash: #2a0f0d;
+}
+
+/* BetterU page pieces restyled to read as dashboard cards */
+.bionis-dashboard.betteru .page { max-width: none; gap: 24px; }
+.bionis-dashboard.betteru .page-head h1 { font-family: 'Geist', sans-serif; font-size: 24px; font-weight: 500; font-stretch: 100%; letter-spacing: -0.02em; }
+.bionis-dashboard.betteru h1, .bionis-dashboard.betteru h2, .bionis-dashboard.betteru h3 { font-stretch: 100%; letter-spacing: -0.01em; }
+.bionis-dashboard.betteru .card, .bionis-dashboard.betteru .panel {
+  background: var(--background); border: 1px solid var(--border); border-radius: 1rem; box-shadow: none; padding: 16px;
+}
+.bionis-dashboard.betteru .card-head h2, .bionis-dashboard.betteru .panel-head h2 { font-size: 18px; font-weight: 500; }
+.bionis-dashboard.betteru .btn { border-radius: 0.625rem; font-weight: 500; letter-spacing: -0.01em; }
+.bionis-dashboard.betteru .btn-primary { background: var(--primary); color: var(--primary-foreground); }
+.bionis-dashboard.betteru .btn-primary:hover:not(:disabled) { background: color-mix(in srgb, var(--primary) 85%, white); color: var(--primary-foreground); }
+.bionis-dashboard.betteru .btn-line { border-color: var(--border); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+.bionis-dashboard.betteru .btn-line:hover:not(:disabled) { background: var(--muted); color: var(--foreground); }
+.bionis-dashboard.betteru .btn-quiet { background: var(--muted); }
+.bionis-dashboard.betteru .input { border: 1px solid var(--border); border-radius: 0.625rem; background: var(--background); }
+.bionis-dashboard.betteru .input:focus { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 25%, transparent); }
+.bionis-dashboard.betteru .stat strong, .bionis-dashboard.betteru .big-stat, .bionis-dashboard.betteru .facts-hero .value { font-family: 'Geist', sans-serif; font-stretch: 100%; }
+.bionis-dashboard.betteru .facts { box-shadow: none; border-radius: 1rem; border-color: var(--foreground); }
+.bionis-dashboard.betteru .facts-title { font-family: 'Archivo', sans-serif; }
+.bionis-dashboard.betteru .facts-bar { background: var(--foreground); }
+.bionis-dashboard.betteru .facts-meter i { background: var(--avocado); }
+.bionis-dashboard.betteru .split-rail { gap: 24px; }
+@media (min-width: 1100px) { .bionis-dashboard.betteru .rail { top: 0; } }
+.bionis-dashboard.betteru .chat { border-radius: 1rem; height: calc(100svh - 80px - 48px); border: 1px solid var(--border); background: var(--background); }
+@media (max-width: 899px) { .bionis-dashboard.betteru .chat { height: calc(100svh - 64px - 48px); border: 0; padding: 0; } }
+.bionis-dashboard.betteru .msg.user .bubble { background: var(--primary); color: var(--primary-foreground); }
+.bionis-dashboard.betteru .chat-rail { height: auto; }
+.bionis-dashboard.betteru .suggestion { border-radius: 0.75rem; border-color: var(--border); background: var(--muted); }
+.bionis-dashboard.betteru .hero-card { border-radius: 1rem; }
+.bionis-dashboard.betteru .sheet { border-radius: 1rem 1rem 0 0; }
+@media (min-width: 760px) { .bionis-dashboard.betteru .sheet { border-radius: 1rem; } }
+.bionis-dashboard.betteru .center-page { min-height: auto; }
+
+/* Hero cards become Bionis-style promo cards inside the app */
+.bionis-dashboard.betteru .hero-card {
+  background: linear-gradient(347deg, var(--promo-gradient-from) 47.58%, var(--promo-gradient-to) 306.43%);
+  color: var(--foreground); border: 1px solid var(--border); border-radius: 1rem; min-height: 0;
+  --on-forest: var(--foreground); --on-forest-muted: var(--muted-foreground);
+  --leaf: var(--avocado); --leaf-ink: var(--avocado-ink); --moss: var(--border);
+}
+.bionis-dashboard.betteru .hero-card-bg, .bionis-dashboard.betteru .hero-card-veil { display: none; }
+.bionis-dashboard.betteru .hero-card-body { text-shadow: none; }
+.bionis-dashboard.betteru .hero-title { font-family: 'Geist', sans-serif; font-stretch: 100%; font-weight: 500; letter-spacing: -0.02em; }
+.bionis-dashboard.betteru .train-hero-stats { background: var(--background); border-color: var(--border); backdrop-filter: none; }
+.bionis-dashboard.betteru .train-hero-stats strong { font-family: 'Geist', sans-serif; font-stretch: 100%; font-weight: 500; color: var(--foreground); }
+.bionis-dashboard.betteru .builder-input { background: var(--background); color: var(--foreground); border-color: var(--border); backdrop-filter: none; }
+.bionis-dashboard.betteru .builder-input::placeholder { color: var(--muted-foreground); }
+.bionis-dashboard.betteru .builder-chip { background: var(--background); color: var(--foreground); border-color: var(--border); }
+.bionis-dashboard.betteru .builder-chip:hover { border-color: var(--avocado); background: var(--muted); }
+.bionis-dashboard.betteru .btn-leaf { background: var(--primary); color: var(--primary-foreground); }
+.bionis-dashboard.betteru .done-mark { color: var(--avocado); }
+
+/* Phones: the coach card is redundant with the Alden menu item; give the menu the room. */
+@media (max-width: 767px) { [data-slot="sidebar"][data-mobile="true"] .coach-card { display: none; } }
+
+/* Brand touches */
+.bionis-dashboard.betteru [aria-current="page"] svg { color: var(--bionis-blue); }
+.bionis-dashboard.betteru [data-slot="sidebar"] { background: var(--sidebar); }
+.bionis-dashboard.betteru .coach-card .bg-primary { background: var(--brand-forest); color: var(--brand-leaf); }
+.dark .bionis-dashboard.betteru .coach-card .bg-primary { background: var(--brand-leaf); color: var(--brand-forest); }

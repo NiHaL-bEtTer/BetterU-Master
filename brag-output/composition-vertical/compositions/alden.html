@@ -1,0 +1,136 @@
+<template>
+  <style>
+  @font-face { font-family: 'Geist'; src: url('assets/fonts/geist-latin.woff2') format('woff2'); font-weight: 100 900; font-display: block; }
+  @font-face { font-family: 'Archivo'; src: url('assets/fonts/archivo-latin.woff2') format('woff2'); font-weight: 100 900; font-display: block; }
+
+  #root { position: absolute; inset: 0; overflow: hidden; font-family: 'Geist', sans-serif; color: #0b140e; }
+  .ground { position: absolute; inset: 0; background: #f2f6ec; }
+  .ground .wash { position: absolute; width: 1400px; height: 1400px; right: -300px; top: -420px; border-radius: 50%;
+     background: radial-gradient(circle, rgba(185,224,106,0.28) 0%, rgba(185,224,106,0) 62%); }
+  .label { position: absolute; left: 200px; top: 0; bottom: 0; width: 560px; display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: 30px; font-weight: 600; color: #4e6b12; letter-spacing: 0.02em; }
+  .eyebrow svg { display: block; }
+  .label h2 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 84px; line-height: 0.98; letter-spacing: -0.03em; color: #0a2416; margin: 0; }
+  .label p { font-size: 36px; line-height: 1.25; color: #5f6b62; margin: 0; max-width: 520px; }
+  .dots { position: absolute; left: 200px; bottom: 130px; display: flex; gap: 10px; }
+  .dots i { display: block; width: 14px; height: 14px; border-radius: 7px; background: #e1e7dc; }
+  .dots i.done { background: #a3b86c; }
+  .dots i.on { width: 44px; background: #4e6b12; }
+  .panel { position: absolute; left: 800px; top: 118px; width: 920px; height: 846px; background: #ffffff;
+     border: 2px solid #e1e7dc; border-radius: 32px; box-shadow: 0 30px 80px rgba(10,36,22,0.10), 0 4px 10px rgba(10,36,22,0.05); overflow: hidden; }
+  .pad { position: absolute; inset: 56px; }
+  .h3 { font-size: 40px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .muted { color: #5f6b62; }
+  .chip { display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; padding: 10px 22px; font-size: 28px; font-weight: 500; }
+  .card { background: #f6f8f3; border: 2px solid #e1e7dc; border-radius: 24px; }
+
+  .label { left: 80px; right: 80px; width: auto; top: 280px; bottom: auto; justify-content: flex-start; gap: 18px; }
+  .label h2 { font-size: 84px; }
+  .label p { max-width: 900px; }
+  .dots { left: 80px; top: 650px; bottom: auto; }
+  .panel { left: 76px; top: 700px; transform-origin: 0 0; }
+
+  .chat-head { position: absolute; left: 0; right: 0; top: 0; height: 104px; display: flex; align-items: center; gap: 18px; padding: 0 44px; border-bottom: 2px solid #e1e7dc; }
+  .avatar { width: 56px; height: 56px; border-radius: 16px; background: #0a2416; display: flex; align-items: center; justify-content: center; }
+  .chat-head b { font-size: 32px; font-weight: 600; }
+  .chat-head span { font-size: 28px; color: #5f6b62; }
+  .feed { position: absolute; left: 44px; right: 44px; top: 128px; z-index: 1; }
+  .chat-head { z-index: 3; background: #fff; }
+  #alden-you { margin-left: auto; width: fit-content; max-width: 620px; background: #0a2416; color: #f2f6ec; font-size: 28px; line-height: 1.35; padding: 18px 26px; border-radius: 26px 26px 8px 26px; }
+  #alden-reply { margin-top: 18px; width: 760px; padding: 22px 30px; }
+  .said { font-size: 28px; color: #5f6b62; }
+  .big { font-size: 72px; font-weight: 600; letter-spacing: -0.04em; color: #0a2416; line-height: 1.05; margin: 4px 0 8px; }
+  .big small { font-size: 32px; color: #5f6b62; font-weight: 500; letter-spacing: 0; margin-left: 8px; }
+  .row { display: grid; grid-template-columns: 210px 1fr 120px; align-items: center; gap: 16px; font-size: 28px; margin-top: 8px; }
+  .bar { height: 12px; border-radius: 6px; background: #e1e7dc; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 6px; transform-origin: left center; }
+  .row .v { text-align: right; font-weight: 600; }
+  .src { margin-top: 14px; display: flex; align-items: center; gap: 14px; }
+  .src .chip { background: #f2f6ec; color: #3f5a0e; font-size: 28px; padding: 8px 18px; }
+  .act { margin-top: 14px; display: flex; align-items: center; gap: 18px; }
+  #alden-btn { position: relative; background: #4e6b12; color: #fff; font-size: 28px; font-weight: 600; border-radius: 14px; padding: 16px 28px; overflow: hidden; }
+  #alden-btn-ok { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #0a2416; opacity: 0; }
+  .hint { font-size: 28px; color: #5f6b62; }
+  .input { position: absolute; left: 44px; right: 44px; bottom: 32px; height: 88px; z-index: 2; border-radius: 22px; border: 2px solid #e1e7dc; background: #f6f8f3; display: flex; align-items: center; padding: 0 28px; font-size: 28px; }
+  #alden-ph { position: absolute; left: 30px; color: #5f6b62; }
+  #alden-typed { white-space: pre; color: #0b140e; }
+  #alden-caret { display: inline-block; width: 3px; height: 34px; background: #4e6b12; margin-left: 2px; vertical-align: middle; }
+  .send { position: absolute; right: 16px; width: 60px; height: 60px; border-radius: 16px; background: #0a2416; display: flex; align-items: center; justify-content: center; }
+  #alden-toast { position: absolute; left: 50%; bottom: 152px; transform: translateX(-50%); background: #0b140e; color: #fff; border-radius: 16px; padding: 16px 26px; font-size: 25px; display: flex; gap: 12px; align-items: center; white-space: nowrap; }
+  #alden-cursor { position: absolute; left: 0; top: 0; width: 44px; height: 44px; z-index: 5; }
+
+  </style>
+  <div id="root" data-composition-id="alden" data-width="1080" data-height="1920">
+
+    <div class="ground"><div class="wash"></div></div>
+    
+    <div class="label">
+      <div class="eyebrow" id="alden-eb"><svg  width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4e6b12" d="M18.5 3.5C9.4 3.5 4.5 8.6 4.5 14.5c0 1.9.5 3.5 1.3 4.9 2.1-4.5 5.8-7.8 10.4-9.5-3.8 2.4-6.6 5.8-8.3 10 1 .5 2.2.8 3.5.8 5.9 0 9.4-5.1 7.1-17.2z"/></svg><span>Alden, your coach</span></div>
+      <h2 id="alden-title">Tell Alden what you ate</h2>
+      <p id="alden-sub">Numbers from USDA, not the model.</p>
+    </div>
+    <div class="dots" id="alden-dots"><i class="done"></i><i class="done"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div>
+    <div class="panel" id="alden-panel">
+      <div class="chat-head"><div class="avatar"><svg  width="34" height="34" viewBox="0 0 24 24" aria-hidden="true"><path fill="#b9e06a" d="M18.5 3.5C9.4 3.5 4.5 8.6 4.5 14.5c0 1.9.5 3.5 1.3 4.9 2.1-4.5 5.8-7.8 10.4-9.5-3.8 2.4-6.6 5.8-8.3 10 1 .5 2.2.8 3.5.8 5.9 0 9.4-5.1 7.1-17.2z"/></svg></div><b>Alden</b><span>Exact nutrition answers, with sources.</span></div>
+      <div class="feed">
+        <div id="alden-you">I had 2 eggs and a slice of toast for breakfast</div>
+        <div id="alden-reply" class="card">
+          <div class="said">2 large eggs and a slice of whole-wheat toast</div>
+          <div class="big" id="alden-kcal">240<small>kcal</small></div>
+          <div class="row" id="alden-r1"><span>Protein</span><div class="bar"><i style="width:100%;background:#4e6b12"></i></div><span class="v">16.9 g</span></div>
+          <div class="row" id="alden-r2"><span>Carbohydrate</span><div class="bar"><i style="width:100%;background:#7aa33a"></i></div><span class="v">16.6 g</span></div>
+          <div class="row" id="alden-r3"><span>Fat</span><div class="bar"><i style="width:100%;background:#a3b86c"></i></div><span class="v">11.3 g</span></div>
+          <div class="src" id="alden-src"><span class="chip">[F12] USDA FoodData Central</span></div>
+          <div class="act" id="alden-act"><div id="alden-btn">Log breakfast<div id="alden-btn-ok">Logged ✓</div></div><span class="hint">Saved only when you tap.</span></div>
+        </div>
+      </div>
+      <div class="input"><span id="alden-ph">Ask Alden, or tell it what you ate…</span><span id="alden-typed" data-layout-ignore></span><span id="alden-caret"></span>
+        <div class="send"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f2f6ec" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div>
+      <svg id="alden-cursor" viewBox="0 0 24 24"><path d="M4 2l15 9.5-6.6 1.4L16 20l-3 1.4-3.6-7.2L4 18z" fill="#0b140e" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo("#alden-eb", {opacity: 0, filter: "blur(8px)"}, {opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out"}, 0.00);
+    tl.fromTo("#alden-title", {opacity: 0, filter: "blur(10px)", x: -24}, {opacity: 1, filter: "blur(0px)", x: 0, duration: 0.32, ease: "expo.out"}, 0.04);
+    tl.fromTo("#alden-sub", {opacity: 0, filter: "blur(8px)"}, {opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out"}, 0.14);
+    tl.fromTo("#alden-panel", {opacity: 0, y: 40, scale: 0.912, filter: "blur(10px)"}, {opacity: 1, y: 0, scale: 0.94, filter: "blur(0px)", duration: 0.42, ease: "expo.out"}, 0.02);
+    tl.fromTo("#alden-dots .on", {width: 14}, {width: 44, duration: 0.35, ease: "power3.out"}, 0.05);
+    const TYPED = "I had 2 eggs and a slice of toast for breakfast";
+    const typed = document.getElementById("alden-typed");
+    tl.set("#alden-you, #alden-reply", {opacity: 0}, 0);
+    tl.set("#alden-ph", {opacity: 1}, 0);
+    tl.set("#alden-ph", {opacity: 0}, 0.30);
+    // typing: 0.30 -> 1.45 s, one character per step, pure function of time
+    const tp = {n: 0};
+    tl.fromTo(tp, {n: 0}, {n: TYPED.length, duration: 1.15, ease: "none", onUpdate: function () {
+      typed.textContent = TYPED.slice(0, Math.round(tp.n));
+    }}, 0.30);
+    // send at 1.55: input clears, bubble arrives
+    tl.to(tp, {n: 0, duration: 0.01, ease: "none", onUpdate: function () { typed.textContent = TYPED.slice(0, Math.round(tp.n)); }}, 1.55);
+    tl.set("#alden-ph", {opacity: 1}, 1.56);
+    tl.fromTo("#alden-you", {opacity: 0, y: 30, scale: 0.96}, {opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "expo.out"}, 1.55);
+    tl.fromTo("#alden-reply", {opacity: 0, y: 36}, {opacity: 1, y: 0, duration: 0.45, ease: "expo.out"}, 1.78);
+    tl.fromTo("#alden-kcal", {opacity: 0, filter: "blur(8px)"}, {opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out"}, 1.92);
+    ["#alden-r1", "#alden-r2", "#alden-r3"].forEach(function (s, i) {
+      tl.fromTo(s, {opacity: 0, x: -16}, {opacity: 1, x: 0, duration: 0.3, ease: "expo.out"}, 2.05 + i * 0.12);
+    });
+    tl.fromTo("#alden-r1 .bar i", {scaleX: 0}, {scaleX: 0.117, duration: 0.6, ease: "expo.out"}, 2.10);
+    tl.fromTo("#alden-r2 .bar i", {scaleX: 0}, {scaleX: 0.114, duration: 0.6, ease: "expo.out"}, 2.22);
+    tl.fromTo("#alden-r3 .bar i", {scaleX: 0}, {scaleX: 0.205, duration: 0.6, ease: "expo.out"}, 2.34);
+    tl.fromTo("#alden-src", {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: 0.3, ease: "expo.out"}, 2.50);
+    tl.fromTo("#alden-act", {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: 0.3, ease: "expo.out"}, 2.66);
+    // cursor glides in and taps "Log breakfast" at 3.60
+    tl.fromTo("#alden-cursor", {x: 760, y: 820, opacity: 0}, {x: 760, y: 820, opacity: 1, duration: 0.1}, 2.85);
+    tl.to("#alden-cursor", {x: 182, y: 630, duration: 0.6, ease: "power2.inOut"}, 2.95);
+    tl.to("#alden-cursor", {scale: 0.85, duration: 0.07, ease: "power2.out"}, 3.58);
+    tl.to("#alden-cursor", {scale: 1, duration: 0.15, ease: "power2.out"}, 3.66);
+    tl.to("#alden-btn", {scale: 0.95, duration: 0.07, ease: "power2.out"}, 3.58);
+    tl.to("#alden-btn", {scale: 1, duration: 0.2, ease: "back.out(2)"}, 3.66);
+    tl.to("#alden-btn-ok", {opacity: 1, duration: 0.15, ease: "power2.out"}, 3.62);
+    tl.to("#alden-cursor", {opacity: 0, duration: 0.3}, 4.3);
+    tl.to("#alden-eb, #alden-title, #alden-sub, #alden-panel", {opacity: 0, filter: "blur(8px)", duration: 0.16, ease: "power2.in"}, 5.09);
+    window.__timelines["alden"] = tl;
+  </script>
+</template>

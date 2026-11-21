@@ -1,0 +1,92 @@
+<template>
+  <style>
+  @font-face { font-family: 'Geist'; src: url('assets/fonts/geist-latin.woff2') format('woff2'); font-weight: 100 900; font-display: block; }
+  @font-face { font-family: 'Archivo'; src: url('assets/fonts/archivo-latin.woff2') format('woff2'); font-weight: 100 900; font-display: block; }
+
+  #root { position: absolute; inset: 0; overflow: hidden; font-family: 'Geist', sans-serif; color: #0b140e; }
+  .ground { position: absolute; inset: 0; background: #f2f6ec; }
+  .ground .wash { position: absolute; width: 1400px; height: 1400px; right: -300px; top: -420px; border-radius: 50%;
+     background: radial-gradient(circle, rgba(185,224,106,0.28) 0%, rgba(185,224,106,0) 62%); }
+  .label { position: absolute; left: 200px; top: 0; bottom: 0; width: 560px; display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: 30px; font-weight: 600; color: #4e6b12; letter-spacing: 0.02em; }
+  .eyebrow svg { display: block; }
+  .label h2 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 84px; line-height: 0.98; letter-spacing: -0.03em; color: #0a2416; margin: 0; }
+  .label p { font-size: 36px; line-height: 1.25; color: #5f6b62; margin: 0; max-width: 520px; }
+  .dots { position: absolute; left: 200px; bottom: 130px; display: flex; gap: 10px; }
+  .dots i { display: block; width: 14px; height: 14px; border-radius: 7px; background: #e1e7dc; }
+  .dots i.done { background: #a3b86c; }
+  .dots i.on { width: 44px; background: #4e6b12; }
+  .panel { position: absolute; left: 800px; top: 118px; width: 920px; height: 846px; background: #ffffff;
+     border: 2px solid #e1e7dc; border-radius: 32px; box-shadow: 0 30px 80px rgba(10,36,22,0.10), 0 4px 10px rgba(10,36,22,0.05); overflow: hidden; }
+  .pad { position: absolute; inset: 56px; }
+  .h3 { font-size: 40px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .muted { color: #5f6b62; }
+  .chip { display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; padding: 10px 22px; font-size: 28px; font-weight: 500; }
+  .card { background: #f6f8f3; border: 2px solid #e1e7dc; border-radius: 24px; }
+
+  .label { left: 80px; right: 80px; width: auto; top: 280px; bottom: auto; justify-content: flex-start; gap: 18px; }
+  .label h2 { font-size: 84px; }
+  .label p { max-width: 900px; }
+  .dots { left: 80px; top: 650px; bottom: auto; }
+  .panel { left: 76px; top: 700px; transform-origin: 0 0; }
+
+  .ph { display: flex; justify-content: space-between; align-items: flex-start; }
+  .ph .muted { font-size: 28px; margin-top: 8px; }
+  .timer { width: 170px; height: 170px; position: relative; }
+  .timer svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+  .timer div { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .timer b { font-size: 42px; font-weight: 600; letter-spacing: -0.02em; }
+  .timer span { font-size: 28px; color: #5f6b62; }
+  .ex { margin-top: 30px; padding: 28px 30px; }
+  .ex h4 { margin: 0 0 18px; font-size: 32px; font-weight: 600; }
+  .set { display: grid; grid-template-columns: 110px 1fr 1fr 60px; align-items: center; font-size: 28px; padding: 16px 0; border-top: 2px solid #e1e7dc; }
+  .set .ok { width: 40px; height: 40px; border-radius: 12px; background: #4e6b12; display: flex; align-items: center; justify-content: center; }
+  .set .todo { width: 40px; height: 40px; border-radius: 12px; border: 2px solid #e1e7dc; }
+  .beat { margin-top: 20px; }
+  .beat .chip { background: #e6efc9; color: #3f5a0e; font-size: 28px; }
+
+  </style>
+  <div id="root" data-composition-id="train" data-width="1080" data-height="1920">
+
+    <div class="ground"><div class="wash"></div></div>
+    
+    <div class="label">
+      <div class="eyebrow" id="train-eb"><svg  width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4e6b12" d="M18.5 3.5C9.4 3.5 4.5 8.6 4.5 14.5c0 1.9.5 3.5 1.3 4.9 2.1-4.5 5.8-7.8 10.4-9.5-3.8 2.4-6.6 5.8-8.3 10 1 .5 2.2.8 3.5.8 5.9 0 9.4-5.1 7.1-17.2z"/></svg><span>Train</span></div>
+      <h2 id="train-title">Training that fits your kit</h2>
+      <p id="train-sub">Built for your equipment.</p>
+    </div>
+    <div class="dots" id="train-dots"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i><i class=""></i><i class=""></i></div>
+    <div class="panel" id="train-panel"><div class="pad">
+      <div class="ph"><div><p class="h3">Full body, 45 minutes</p><p class="muted">Day 1 · Dumbbells</p></div>
+        <div class="timer" id="train-timer"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="#e1e7dc" stroke-width="7"/><circle id="train-arc" cx="50" cy="50" r="44" fill="none" stroke="#4e6b12" stroke-width="7" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="0"/></svg>
+          <div><b id="train-t">1:30</b><span>Rest</span></div></div></div>
+      <div class="ex card">
+        <h4>Goblet squat</h4>
+        <div class="set" id="train-s0"><span class="muted">Set 1</span><span>12 reps</span><span>16 kg</span><span class="ok"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg></span></div>
+        <div class="set" id="train-s1"><span class="muted">Set 2</span><span>12 reps</span><span>16 kg</span><span class="ok" id="train-ok1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg></span></div>
+        <div class="set" id="train-s2"><span class="muted">Set 3</span><span>12 reps</span><span>16 kg</span><span class="todo"></span></div>
+        <div class="beat" id="train-beat" data-layout-ignore><span class="chip">Beat last time: 12 × 16 kg</span></div>
+      </div>
+    </div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo("#train-eb", {opacity: 0, filter: "blur(8px)"}, {opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out"}, 0.00);
+    tl.fromTo("#train-title", {opacity: 0, filter: "blur(10px)", x: -24}, {opacity: 1, filter: "blur(0px)", x: 0, duration: 0.32, ease: "expo.out"}, 0.04);
+    tl.fromTo("#train-sub", {opacity: 0, filter: "blur(8px)"}, {opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out"}, 0.14);
+    tl.fromTo("#train-panel", {opacity: 0, y: 40, scale: 0.912, filter: "blur(10px)"}, {opacity: 1, y: 0, scale: 0.94, filter: "blur(0px)", duration: 0.42, ease: "expo.out"}, 0.02);
+    tl.fromTo("#train-dots .on", {width: 14}, {width: 44, duration: 0.35, ease: "power3.out"}, 0.05);
+    tl.fromTo("#train-s0, #train-s1, #train-s2", {opacity: 0, x: -16}, {opacity: 1, x: 0, duration: 0.3, ease: "expo.out", stagger: 0.07}, 0.3);
+    tl.fromTo("#train-ok1", {scale: 0.4, opacity: 0}, {scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2)"}, 0.72);
+    tl.fromTo("#train-beat", {opacity: 0, y: 12}, {opacity: 1, y: 0, duration: 0.3, ease: "expo.out"}, 0.6);
+    // rest timer: 1:30 counting down from 0.75 s, arc drains (linear: it is a clock)
+    tl.fromTo("#train-arc", {strokeDashoffset: 0}, {strokeDashoffset: 276.5 * (3 / 90), duration: 1.3, ease: "none"}, 0.75);
+    const rt = {v: 90}; const te = document.getElementById("train-t");
+    tl.fromTo(rt, {v: 90}, {v: 87.01, duration: 1.3, ease: "none", onUpdate: function () {
+      const s = Math.ceil(rt.v); te.textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+    }}, 0.75);
+    tl.to("#train-eb, #train-title, #train-sub, #train-panel", {opacity: 0, filter: "blur(8px)", duration: 0.16, ease: "power2.in"}, 1.93);
+    window.__timelines["train"] = tl;
+  </script>
+</template>
