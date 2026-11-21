@@ -1,11 +1,26 @@
-# ChromaDB / vector DB storage
-chroma/
-chromadb/
-*.chroma/
-*.chromadb/
-chromadb/
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
 __pycache__/
 *.pyc
-.env
-Backend/raw_downloads/
-Backend/ingestion.log
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node / web build
+node_modules/
+apps/web/dist/
+
+# Downloaded datasets and logs (re-created by `python -m betteru.ingest`)
+apps/api/data/raw/
+*.log
+
+.DS_Store
+
+# brag video tooling and caches
+brag-output/work/
+brag-output/**/.hyperframes/
+brag-output/**/node_modules/

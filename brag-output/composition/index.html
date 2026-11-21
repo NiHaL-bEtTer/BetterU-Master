@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id": "color-ground", "type": "color", "label": "Background", "default": "#0a2416"}, {"id": "color-ink", "type": "color", "label": "Text", "default": "#0b140e"}, {"id": "color-accent", "type": "color", "label": "Accent", "default": "#4e6b12"}, {"id": "font-display", "type": "string", "label": "Display font", "default": "Archivo"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #f2f6ec; }
+      #root { position: relative; width: 100%; height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="25.0" data-width="1920" data-height="1080" data-fps="30">
+      <div id="hook" class="clip" data-composition-id="hook" data-composition-src="compositions/hook.html" data-start="0.0" data-duration="3.7" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="targets" class="clip" data-composition-id="targets" data-composition-src="compositions/targets.html" data-start="3.7" data-duration="2.1" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="alden" class="clip" data-composition-id="alden" data-composition-src="compositions/alden.html" data-start="5.8" data-duration="5.26" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="today" class="clip" data-composition-id="today" data-composition-src="compositions/today.html" data-start="11.06" data-duration="3.16" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="log" class="clip" data-composition-id="log" data-composition-src="compositions/log.html" data-start="14.22" data-duration="2.12" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="train" class="clip" data-composition-id="train" data-composition-src="compositions/train.html" data-start="16.34" data-duration="2.1" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="progress" class="clip" data-composition-id="progress" data-composition-src="compositions/progress.html" data-start="18.44" data-duration="2.1" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="outro" class="clip" data-composition-id="outro" data-composition-src="compositions/outro.html" data-start="20.54" data-duration="4.46" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <audio id="music" class="clip" data-start="0" data-duration="25.0" data-track-index="2" data-volume="0.85" data-fade-in="0.3" data-fade-out="1.2" data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":1},{"t":0.12,"v":1},{"t":0.32,"v":0.17},{"t":20.42,"v":0.17},{"t":20.72,"v":1},{"t":22.36,"v":1},{"t":22.6,"v":0.17},{"t":25,"v":0.17}]}]}' src="assets/music/happy-beats-business-moves-vol-11-by-ende-dot-app.mp3"></audio>
+      <audio id="vo" class="clip" data-start="0" data-duration="24.7" data-track-index="5" data-volume="0.8" src="assets/voiceover.wav"></audio>
+      <audio id="sfx00" class="clip" data-start="1.633" data-duration="0.183" data-track-index="3" data-volume="0.77" src="assets/sfx/impactSoft_medium_001.ogg"></audio>
+      <audio id="sfx01" class="clip" data-start="3.3" data-duration="0.601" data-track-index="3" data-volume="0.31" src="assets/sfx/card-slide-1.ogg"></audio>
+      <audio id="sfx02" class="clip" data-start="6.13" data-duration="0.25" data-track-index="3" data-volume="0.42" src="assets/sfx/keypress-003.wav"></audio>
+      <audio id="sfx03" class="clip" data-start="6.27" data-duration="0.25" data-track-index="4" data-volume="0.36" src="assets/sfx/keypress-011.wav"></audio>
+      <audio id="sfx04" class="clip" data-start="6.42" data-duration="0.25" data-track-index="3" data-volume="0.42" src="assets/sfx/keypress-019.wav"></audio>
+      <audio id="sfx05" class="clip" data-start="6.58" data-duration="0.25" data-track-index="4" data-volume="0.36" src="assets/sfx/keypress-027.wav"></audio>
+      <audio id="sfx06" class="clip" data-start="6.73" data-duration="0.25" data-track-index="3" data-volume="0.42" src="assets/sfx/keypress-007.wav"></audio>
+      <audio id="sfx07" class="clip" data-start="6.88" data-duration="0.25" data-track-index="4" data-volume="0.36" src="assets/sfx/keypress-015.wav"></audio>
+      <audio id="sfx08" class="clip" data-start="7.03" data-duration="0.25" data-track-index="3" data-volume="0.42" src="assets/sfx/keypress-023.wav"></audio>
+      <audio id="sfx09" class="clip" data-start="7.18" data-duration="0.25" data-track-index="4" data-volume="0.36" src="assets/sfx/keypress-031.wav"></audio>
+      <audio id="sfx10" class="clip" data-start="7.383" data-duration="0.01" data-track-index="3" data-volume="0.7" src="assets/sfx/click_003.ogg"></audio>
+      <audio id="sfx11" class="clip" data-start="7.613" data-duration="0.191" data-track-index="3" data-volume="0.49" src="assets/sfx/drop_002.ogg"></audio>
+      <audio id="sfx12" class="clip" data-start="9.413" data-duration="0.01" data-track-index="3" data-volume="0.98" src="assets/sfx/click_003.ogg"></audio>
+      <audio id="sfx13" class="clip" data-start="9.45" data-duration="0.15" data-track-index="3" data-volume="0.42" src="assets/sfx/impactSoft_medium_004.ogg"></audio>
+      <audio id="sfx14" class="clip" data-start="11.56" data-duration="0.601" data-track-index="3" data-volume="0.22" src="assets/sfx/card-slide-1.ogg"></audio>
+      <audio id="sfx15" class="clip" data-start="14.45" data-duration="0.25" data-track-index="3" data-volume="0.36" src="assets/sfx/keypress-007.wav"></audio>
+      <audio id="sfx16" class="clip" data-start="14.62" data-duration="0.25" data-track-index="4" data-volume="0.36" src="assets/sfx/keypress-019.wav"></audio>
+      <audio id="sfx17" class="clip" data-start="14.8" data-duration="0.25" data-track-index="3" data-volume="0.36" src="assets/sfx/keypress-031.wav"></audio>
+      <audio id="sfx18" class="clip" data-start="20.54" data-duration="0.601" data-track-index="3" data-volume="0.31" src="assets/sfx/card-slide-1.ogg"></audio>
+      <audio id="sfx19" class="clip" data-start="22.683" data-duration="0.654" data-track-index="3" data-volume="0.63" src="assets/sfx/impactBell_heavy_003.ogg"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
