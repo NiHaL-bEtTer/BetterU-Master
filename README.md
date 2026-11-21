@@ -16,19 +16,9 @@ Track food against your targets, train with a plan built for you, and ask
 
 <br>
 
-<a href="brag-output/final/BetterU-launch-vertical-voiceover.mp4">
-  <img src="docs/media/betteru-promo.gif" alt="BetterU promo: tell Alden what you ate, get exact USDA numbers, log it in one tap" width="300">
-</a>
+<img src="docs/media/betteru-promo.gif" alt="BetterU promo: tell Alden what you ate, get exact USDA numbers, log it in one tap" width="300">
 
-<sub><b>▶ 25-second tour</b> · tap the preview to watch with sound</sub>
-
-<p>
-  <a href="brag-output/final/BetterU-launch-vertical-voiceover.mp4"><b>📱 Phone</b></a>
-  &nbsp;·&nbsp;
-  <a href="brag-output/final/BetterU-launch-landscape-voiceover.mp4"><b>🖥️ Widescreen</b></a>
-  &nbsp;·&nbsp;
-  <a href="brag-output/final/BetterU-launch-landscape-music-only.mp4"><b>🎵 Music only</b></a>
-</p>
+<sub><b>▶ 25-second tour</b></sub>
 
 </div>
 

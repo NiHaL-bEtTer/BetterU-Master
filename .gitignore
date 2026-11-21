@@ -20,7 +20,6 @@ apps/api/data/raw/
 
 .DS_Store
 
-# brag video tooling and caches
-brag-output/work/
-brag-output/**/.hyperframes/
-brag-output/**/node_modules/
+
+# launch videos: kept on disk only
+brag-output/
